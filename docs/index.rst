@@ -110,6 +110,15 @@ Currently, those fields will be translated into days using either 365 or 30 resp
 To override this setting, add an entry into your settings named ``DURATIONFIELD_YEARS_TO_DAYS``
 or ``DURATIONFIELD_MONTHS_TO_DAYS`` setting a new translation value.
 
+Short Duration Use Cases
+------------------------
+
+The default functionality is to assume that ``12:34`` means 12 hours and 34 minutes but if your users are usually entering durations less than an hour you can change this so ``12:34`` means 12 minutes and 34 seconds instead.
+
+To change this, add an entry to your settings like this::
+
+    ``DURATIONFIELD_ASSUME_MMSS = True``
+
 Development
 -----------
 

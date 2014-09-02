@@ -13,6 +13,7 @@ ALLOW_MONTHS = getattr(settings, "DURATIONFIELD_ALLOW_MONTHS", False)
 ALLOW_YEARS = getattr(settings, "DURATIONFIELD_ALLOW_YEARS", False)
 MONTHS_TO_DAYS = getattr(settings, "DURATIONFIELD_MONTHS_TO_DAYS", 30)
 YEARS_TO_DAYS = getattr(settings, "DURATIONFIELD_YEARS_TO_DAYS", 365)
+ASSUME_MMSS = getattr(settings, "DURATIONFIELD_ASSUME_MMSS", False)
 
 
 def str_to_timedelta(td_str):
@@ -28,8 +29,11 @@ def str_to_timedelta(td_str):
     """
     if not td_str:
         return None
+    if not ASSUME_MMSS:
+        time_format = r"(?:(?P<weeks>\d+)\W*(?:weeks?|w),?)?\W*(?:(?P<days>\d+)\W*(?:days?|d),?)?\W*(?:(?P<hours>\d+):(?P<minutes>\d+)(?::(?P<seconds>\d+)(?:\.(?P<microseconds>\d+))?)?)?"
+    else:
+        time_format = r"(?:(?P<weeks>\d+)\W*(?:weeks?|w),?)?\W*(?:(?P<days>\d+)\W*(?:days?|d),?)?\W*(?:(?P<hours>\d+):)??(?:(?P<minutes>\d+)(?::(?P<seconds>\d+))?)(?:\.(?P<microseconds>\d+))?$"
 
-    time_format = r"(?:(?P<weeks>\d+)\W*(?:weeks?|w),?)?\W*(?:(?P<days>\d+)\W*(?:days?|d),?)?\W*(?:(?P<hours>\d+):(?P<minutes>\d+)(?::(?P<seconds>\d+)(?:\.(?P<microseconds>\d+))?)?)?"
     if ALLOW_MONTHS:
         time_format = r"(?:(?P<months>\d+)\W*(?:months?|m),?)?\W*" + time_format
     if ALLOW_YEARS:
